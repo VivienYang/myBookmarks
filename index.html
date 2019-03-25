@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>网页收藏夹</title>
+</head>
+<body>
+    <header>header</header
+    <main id="mainxxx">
+
+    </main>
+    <footer></footer>
+    <script>
+        keys = new Array(4)
+        keys[0] = ['1','2','3','4','5','6','7','8','9','0'];
+        keys[1] = ['q','w','e','r','t','y','u','i','o','p'];
+        keys[2] = ['a','s','d','f','g','h','j','k','l'];
+        keys[3] = ['z','x','c','v','b','n','m'];
+        hash = {
+            '1':'taobao.com',
+            '2':'tmall.com',
+            '3':'zhihu.com',
+            'q':'qq.com',
+            'y':'youtube.com',
+            'i':'iqiyi.com',
+            'a':'alibaba.com',
+            's':'souhu.com',
+            'z':'zhihu.com',
+            'm':'mail.qq.com'
+        }
+        for(i=0;i<keys.length;i++){
+            div = document.createelement('div')
+            for(j=0;j<keys[i].length;j++){
+                kbd = document.createElement('kbd')
+                kbd.textContent = keys[i][j]
+                ßkbd.id = keys[i][j]
+                div.appendChild(kbd)
+            }
+            mainxxx.appendChild(div)
+        }
+        
+    </script>
+</body>
+</html>
