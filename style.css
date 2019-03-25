@@ -1,0 +1,29 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+main .wrapper > div{
+    text-align: center;
+}
+main .wrapper > div > kbd{
+    width: 4em;
+    height: 4em;
+    display: inline-block;
+    border: 1px solid #ccc;
+    margin: 5px;
+    text-transform: uppercase;
+    position: relative;
+}
+main .wrapper > div > kbd button{
+    display: none;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+main .wrapper > div > kbd:hover button{
+    display: block;
+}

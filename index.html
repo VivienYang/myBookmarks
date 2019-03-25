@@ -5,20 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>网页收藏夹</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>header</header
-    <main id="mainxxx">
-
+    <header>header</header>
+    <main>
+        <div class="wrapper" id="mainxxx"></div>
     </main>
     <footer></footer>
     <script>
-        keys = new Array(4)
+        var keys = new Array(4)
         keys[0] = ['1','2','3','4','5','6','7','8','9','0'];
         keys[1] = ['q','w','e','r','t','y','u','i','o','p'];
         keys[2] = ['a','s','d','f','g','h','j','k','l'];
         keys[3] = ['z','x','c','v','b','n','m'];
-        hash = {
+        var hash = {
             '1':'taobao.com',
             '2':'tmall.com',
             '3':'zhihu.com',
@@ -31,16 +32,37 @@
             'm':'mail.qq.com'
         }
         for(i=0;i<keys.length;i++){
-            div = document.createelement('div')
+            var div = document.createElement('div')
             for(j=0;j<keys[i].length;j++){
-                kbd = document.createElement('kbd')
+                var kbd = document.createElement('kbd')
                 kbd.textContent = keys[i][j]
-                ßkbd.id = keys[i][j]
+                var buttonX = document.createElement('button')
+                buttonX.textContent = 'edit'
+                buttonX.id = keys[i][j];
+                kbd.appendChild(buttonX)
                 div.appendChild(kbd)
+                buttonX.onclick = function(xxx){
+                    console.log(buttonX)
+                    // console.log(xxx)
+                    console.log(xxx.target)
+                    var new_url = prompt('请输入您希望关联的网址')
+                    hash[xxx.target.id]=new_url;
+                }
             }
             mainxxx.appendChild(div)
         }
-        
+        document.onkeypress = function(yyy){
+            console.log(yyy);
+            
+            if(hash[yyy.key] && hash[yyy.key].length>0){
+                var url = 'https://'+hash[yyy.key];
+                // location.href = url;
+                window.open(url,'_blank')
+            }else{
+                alert(`您没有定义按键${yyy.key}对应的网址`)
+            }
+            
+        }
     </script>
 </body>
 </html>
