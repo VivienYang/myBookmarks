@@ -39,7 +39,20 @@
             var div = document.createElement('div')
             for(j=0;j<keys[i].length;j++){
                 var kbd = document.createElement('kbd')
-                kbd.textContent = keys[i][j]
+                var textSpan = document.createElement('span')
+                textSpan.textContent = keys[i][j]
+                textSpan.className = 'key'
+                kbd.appendChild(textSpan)
+                var iconImg = document.createElement('img')
+                var item = keys[i][j];
+                // console.log('item'+item+'===='+hash[item])
+                if(hash[item]){
+                    console.log('item'+item+'===='+hash[item])
+                    iconImg.src="https://"+hash[item]+"/favicon.ico"
+                }else{
+                    iconImg.src="//i.loli.net/2017/11/10/5a05afbc5e183.png"
+                }
+                kbd.appendChild(iconImg)
                 var buttonX = document.createElement('button')
                 buttonX.textContent = 'edit'
                 buttonX.id = keys[i][j];
