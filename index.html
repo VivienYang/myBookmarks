@@ -14,72 +14,118 @@
     </main>
     <footer></footer>
     <script>
-        var keys = new Array(4)
-        keys[0] = ['1','2','3','4','5','6','7','8','9','0'];
-        keys[1] = ['q','w','e','r','t','y','u','i','o','p'];
-        keys[2] = ['a','s','d','f','g','h','j','k','l'];
-        keys[3] = ['z','x','c','v','b','n','m'];
-        var hash = {
-            '1':'taobao.com',
-            '2':'tmall.com',
-            '3':'zhihu.com',
-            'q':'qq.com',
-            'y':'youtube.com',
-            'i':'iqiyi.com',
-            'a':'alibaba.com',
-            's':'sohu.com',
-            'z':'zhihu.com',
-            'm':'mail.qq.com'
+        //step1:初始化数据
+        var dataObj = initData();
+        var keys = dataObj.keys;
+        var hash = dataObj.hash;
+        //step2:生成键盘
+        generateKBD(keys,hash)
+        // step3:监听用户按键盘
+        listenUser(hash)
+
+        //下面是私有函数
+        function initData(){
+            var keys = new Array(4)
+            keys[0] = ['1','2','3','4','5','6','7','8','9','0'];
+            keys[1] = ['q','w','e','r','t','y','u','i','o','p'];
+            keys[2] = ['a','s','d','f','g','h','j','k','l'];
+            keys[3] = ['z','x','c','v','b','n','m'];
+            var hash = {
+                '1':'taobao.com',
+                '2':'tmall.com',
+                '3':'zhihu.com',
+                'q':'qq.com',
+                'y':'youtube.com',
+                'i':'iqiyi.com',
+                'a':'alibaba.com',
+                's':'sohu.com',
+                'z':'zhihu.com',
+                'm':'mail.qq.com'
+            }
+            var hash_ls = JSON.parse(localStorage.getItem('hash_ls')||'null')
+            if(hash_ls){
+                hash = hash_ls;
+            }
+            return {
+                keys:keys,
+                hash:hash
+            }
         }
-        var hash_ls = JSON.parse(localStorage.getItem('hash_ls')||'null')
-        if(hash_ls){
-            hash = hash_ls;
+        function createTag(tagName,myattr){
+            //创建一个html标签，并添加一些属性
+            var tag = document.createElement(tagName)
+            for(var key in myattr){//for in 循环用来遍历hash
+                tag[key]=myattr[key]
+            }
+            return tag;
         }
-        for(i=0;i<keys.length;i++){
-            var div = document.createElement('div')
-            for(j=0;j<keys[i].length;j++){
-                var kbd = document.createElement('kbd')
-                var textSpan = document.createElement('span')
-                textSpan.textContent = keys[i][j]
-                textSpan.className = 'key'
-                kbd.appendChild(textSpan)
-                var iconImg = document.createElement('img')
-                var item = keys[i][j];
-                // console.log('item'+item+'===='+hash[item])
-                if(hash[item]){
-                    console.log('item'+item+'===='+hash[item])
-                    iconImg.src="https://"+hash[item]+"/favicon.ico"
+        function generateKBD(keys,hash){
+            for(i=0;i<keys.length;i++){
+                var div = document.createElement('div')
+                for(j=0;j<keys[i].length;j++){
+                    var tag_attr={}
+                    tag_attr={'textContent':keys[i][j],'className':'key'}
+                    var textSpan=createTag('span',tag_attr)
+
+                    
+                    var iconImg = document.createElement('img')
+                    var item = keys[i][j];
+                    var img_url
+                    if(hash[item]){
+                        img_url="https://"+hash[item]+"/favicon.ico"
+                    }else{
+                        img_url="//i.loli.net/2017/11/10/5a05afbc5e183.png"
+                    }
+                    iconImg.onerror=function(e){
+                        console.log('图片出错了')
+                        img_url="//i.loli.net/2017/11/10/5a05afbc5e183.png"
+                    }
+                    tag_attr={"src":img_url}
+                    var iconImg=createTag('img',tag_attr)
+
+
+                    var buttonX = document.createElement('button')
+                    buttonX.textContent = 'edit'
+                    buttonX.id = keys[i][j];
+                    buttonX.onclick = function(xxx){
+                        console.log(buttonX)
+                        // console.log(xxx)
+                        console.log(xxx.target)
+                        var new_url = prompt('请输入您希望关联的网址')
+                        var img2=xxx.target.previousSibling;
+                        img2.src="https://"+new_url+"/favicon.ico"
+                        img2.onerror=function(e){
+                            console.log(e.target)
+                            e.target.src="//i.loli.net/2017/11/10/5a05afbc5e183.png"
+                        }
+                        hash[xxx.target.id]=new_url;
+                        localStorage.setItem('hash_ls',JSON.stringify(hash))
+                    }
+
+                    var kbd = document.createElement('kbd')
+                    kbd.appendChild(textSpan)
+                    kbd.appendChild(iconImg)
+                    kbd.appendChild(buttonX)
+
+                    div.appendChild(kbd)
+
+                }
+                mainxxx.appendChild(div)
+            }
+        }
+        function listenUser(hash){
+            document.onkeypress = function(yyy){
+                console.log(yyy);
+                
+                if(hash[yyy.key] && hash[yyy.key].length>0){
+                    var url = 'https://'+hash[yyy.key];
+                    // location.href = url;
+                    window.open(url,'_blank')
                 }else{
-                    iconImg.src="//i.loli.net/2017/11/10/5a05afbc5e183.png"
+                    alert(`${yyy.key}对应的网址没有编辑`)
                 }
-                kbd.appendChild(iconImg)
-                var buttonX = document.createElement('button')
-                buttonX.textContent = 'edit'
-                buttonX.id = keys[i][j];
-                kbd.appendChild(buttonX)
-                div.appendChild(kbd)
-                buttonX.onclick = function(xxx){
-                    console.log(buttonX)
-                    // console.log(xxx)
-                    console.log(xxx.target)
-                    var new_url = prompt('请输入您希望关联的网址')
-                    hash[xxx.target.id]=new_url;
-                    localStorage.setItem('hash_ls',JSON.stringify(hash))
-                }
+                
             }
-            mainxxx.appendChild(div)
-        }
-        document.onkeypress = function(yyy){
-            console.log(yyy);
-            
-            if(hash[yyy.key] && hash[yyy.key].length>0){
-                var url = 'https://'+hash[yyy.key];
-                // location.href = url;
-                window.open(url,'_blank')
-            }else{
-                alert(`您没有定义按键${yyy.key}对应的网址`)
-            }
-            
         }
     </script>
 </body>
